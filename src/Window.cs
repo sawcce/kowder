@@ -175,9 +175,15 @@ namespace kowder
 
             var str = KeyboardLayouts.GetKey(e.ScanCode);
 
-            if (str == "Backspace")
+            switch (str)
             {
-                typedContent = typedContent.Remove(typedContent.Length - 1);
+                case "Backspace":
+                    if(typedContent.Length > 0) {
+                        typedContent = typedContent.Remove(typedContent.Length - 1);
+                    }
+                    break;
+                case "undefined":
+                    break;
             }
 
             //Console.WriteLine("{0} {1}  {2}", e.Key.ToString(), str, e.ScanCode.ToString());

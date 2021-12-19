@@ -6,7 +6,7 @@ namespace kowder
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
-    using ExtendingList = System.Collections.Generic.Dictionary<string, dynamic>;
+    using ExtendingList = System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>>;
     class Package
     {
         public string name;
@@ -33,7 +33,7 @@ namespace kowder
                 
                 if(p.extends != null) 
                 {
-                    foreach(KeyValuePair<string, dynamic> entry in p.extends) {
+                    foreach(KeyValuePair<string, List<string>> entry in p.extends) {
                         switch(entry.Key) {
                             case "kowder.scancodes":
                                 KeyboardLayouts.AddScancodeMappings(dir, entry.Value);

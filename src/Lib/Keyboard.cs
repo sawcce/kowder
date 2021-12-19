@@ -59,7 +59,7 @@ namespace kowder
       /// </summary>
       public static string GetKey(int scanCode)
       {
-         var def = "undef";
+         var def = "undefined";
          scanCodeMaps[currentLayout].scancodes.TryGetValue(scanCode, out def);
 
          var shiftPressed = false;
