@@ -9,9 +9,10 @@ scancodes:
   7: "-"
   8: è
   9: _
-  10: à
-  11: )
-  12: =
+  10: ç
+  11: à
+  12: )
+  13: =
 
   # First row of letters
   16: a
@@ -95,7 +96,8 @@ modifiers:
     9: 8
     10: 9
     11: 0
-    12: +
+    12: °
+    13: +
 
     # First row of letters
     16: A

@@ -1,0 +1,5 @@
+namespace kowder {
+    class Palette {
+        
+    }
+}

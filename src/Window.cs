@@ -48,7 +48,13 @@ namespace kowder
                         while (!Window.window.IsClosing)
                         {
                             Glfw.PollEvents();
+                            // Get difference of time (ms) between last render call
+                            // and current time
                             var diff = lastTime - DateTimeOffset.Now.ToUnixTimeSeconds();
+
+                            // If more than 1/60 of a sec has elapsed since last render call
+                            // re-render
+                            // Effect: Sets a cap of 60fps
                             if (Math.Abs(diff) >= 1 / 60)
                             {
                                 Window.Render();
@@ -59,7 +65,8 @@ namespace kowder
                 }
             }
         }
-
+        
+        /// <summary> Add the event handlers to their respective events </summary>
         private static void SubscribeToWindowEvents()
         {
             Window.window.SizeChanged += Window.OnWindowsSizeChanged;
@@ -70,6 +77,7 @@ namespace kowder
             Window.window.MouseButton += Window.OnMousePressed;
         }
 
+        /// <summary>Generates the skia context using a window element</summary>
         private static GRContext GenerateSkiaContext(NativeWindow nativeWindow)
         {
             var nativeContext = Window.GetNativeContext(nativeWindow);
@@ -98,6 +106,8 @@ namespace kowder
             throw new PlatformNotSupportedException();
         }
 
+        /// <summary>Generates the skia surface used for the canvas</summary>
+
         private static SKSurface GenerateSkiaSurface(GRContext skiaContext, Size surfaceSize)
         {
             var frameBufferInfo = new GRGlFramebufferInfo((uint)new UIntPtr(0), GRPixelConfig.Rgba8888.ToGlSizedFormat());
@@ -110,6 +120,9 @@ namespace kowder
         }
 
         #endregion setup
+        /// <summary>
+        /// Function called every rendered frame
+        /// </summary>
         private static void Render()
         {
 
@@ -162,12 +175,18 @@ namespace kowder
             Window.Render();
         }
 
+        /// <summary>
+        /// Event called whenever a key is released
+        /// </summary>
         private static void OnWindowKeyReleased(object sender, KeyEventArgs e)
         {
             // Console.WriteLine("Release");
             Window.keys[e.ScanCode] = false;
         }
 
+        /// <summary>
+        /// Event called whenever a key is pressed
+        /// </summary>
         private static void OnWindowKeyPress(object sender, KeyEventArgs e)
         {
             Window.lastKeyPressed = e.Key;
