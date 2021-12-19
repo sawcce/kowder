@@ -1,0 +1,13 @@
+namespace: sawcce.js
+include:
+  - comments
+
+declare:
+  comments:
+    patterns:
+      - comment.single:
+          start: "(//)"
+          end: "\n"
+      - comment.block:
+          start: "/*"
+          end: "*/"

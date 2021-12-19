@@ -6,29 +6,27 @@ namespace kowder
     using GLFW;
     using SkiaSharp;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     class Window
     {
-        [DllImport("user32.dll")]
-        static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+        private static long lastTime = DateTimeOffset.Now.ToUnixTimeSeconds();
         private static NativeWindow window;
         private static SKCanvas canvas;
         private static GRContext context;
         private static SKSurface skiaSurface;
         private static Keys? lastKeyPressed;
-        private static Point? lastMousePosition;
+        public static Point lastMousePosition = new Point(0,0);
         private static float i = 0;
         private static Action render = delegate () { };
         private static Size windowSize;
         //private static Dictionary<MouseButton, bool> lastMouseButtons = new Dictionary<MouseButton, bool>();
         private static Dictionary<MouseButton, InputState> mouseButtons = new Dictionary<MouseButton, InputState>();
+        public static Dictionary<int, bool> keys = new Dictionary<int, bool>();
         private static Point dragOffset = new Point(0, 0);
         private static bool dragging = false;
         public static Size Size { get { return windowSize; } }
-
-        //----------------------------------
-        //NOTE: On Windows you must copy SharedLib manually (https://github.com/ForeverZer0/glfw-net#microsoft-windows)
-        //----------------------------------
+        public static string typedContent = "";
 
         #region  setup
         public static void Init()
@@ -40,7 +38,6 @@ namespace kowder
             {
                 Window.SubscribeToWindowEvents();
                 IntPtr hWnd = window.Handle;
-                SetWindowLong(hWnd, -20, 1);
 
                 using (Window.context = Window.GenerateSkiaContext(Window.window))
                 {
@@ -50,9 +47,13 @@ namespace kowder
                         windowSize = window.ClientSize;
                         while (!Window.window.IsClosing)
                         {
-                            Window.Render();
                             Glfw.PollEvents();
-
+                            var diff = lastTime - DateTimeOffset.Now.ToUnixTimeSeconds();
+                            if (Math.Abs(diff) >= 1 / 60)
+                            {
+                                Window.Render();
+                                lastTime = DateTimeOffset.Now.ToUnixTimeSeconds();
+                            }
                         }
                     }
                 }
@@ -64,6 +65,7 @@ namespace kowder
             Window.window.SizeChanged += Window.OnWindowsSizeChanged;
             Window.window.Refreshed += Window.OnWindowRefreshed;
             Window.window.KeyPress += Window.OnWindowKeyPress;
+            Window.window.KeyRelease += Window.OnWindowKeyReleased;
             Window.window.MouseMoved += Window.OnWindowMouseMoved;
             Window.window.MouseButton += Window.OnMousePressed;
         }
@@ -160,13 +162,33 @@ namespace kowder
             Window.Render();
         }
 
+        private static void OnWindowKeyReleased(object sender, KeyEventArgs e)
+        {
+            // Console.WriteLine("Release");
+            Window.keys[e.ScanCode] = false;
+        }
+
         private static void OnWindowKeyPress(object sender, KeyEventArgs e)
         {
             Window.lastKeyPressed = e.Key;
-            if (e.Key == Keys.Enter || e.Key == Keys.NumpadEnter)
+            Window.keys[e.ScanCode] = true;
+
+            var str = KeyboardLayouts.GetKey(e.ScanCode);
+
+            if (str == "Backspace")
             {
-                Window.window.Close();
+                typedContent = typedContent.Remove(typedContent.Length - 1);
             }
+
+            //Console.WriteLine("{0} {1}  {2}", e.Key.ToString(), str, e.ScanCode.ToString());
+            if (e.Key.ToString().Length == 1)
+            {
+                typedContent += str;
+            }
+            // if (e.Key == Keys.Enter || e.Key == Keys.NumpadEnter)
+            // {
+            //     Window.window.Close();
+            // }
         }
 
         private static void OnWindowMouseMoved(object sender, MouseMoveEventArgs e)
@@ -190,7 +212,7 @@ namespace kowder
         public static bool IsCursorInBounds(int x, int xx, int y, int yy)
         {
             var mousePos = Window.GetMousePosition().Value;
-            
+
             var inBoundsX = (mousePos.X >= x && mousePos.X <= xx);
             if (!inBoundsX) return false;
 

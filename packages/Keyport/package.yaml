@@ -1,0 +1,6 @@
+name: Keyport
+author: Sawcce
+extends:
+  kowder.scancodes:
+    - qwerty.yaml
+    - azerty.yaml

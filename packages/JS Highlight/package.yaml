@@ -1,0 +1,4 @@
+name: Js Highlight
+extends:
+  Syntax Support:
+    - "./syntaxes/js.yaml"
