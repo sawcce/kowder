@@ -239,6 +239,35 @@ namespace kowder
         #endregion
 
         #region Helpers
+        /// <summary>
+        /// Safe wrapper to get the current state of a key
+        /// even if it doesn't exist in the dictionary
+        /// </summary>
+        public static bool GetKeyPressed(int scanCode)
+        {
+            var pressed = false;
+            keys.TryGetValue(scanCode, out pressed);
+
+            return pressed;
+        }
+
+        /// <summary>
+        /// Safe wrapper to get the current state of a key
+        /// even if it doesn't exist in the dictionary
+        /// if one key isn't pressed it'll check for the other key
+        /// and return the result of the or operator on the two
+        /// bools
+        /// </summary>
+        public static bool GetKeyPressed(int scanCode, int scanCode2)
+        {
+            var pressed = false;
+            keys.TryGetValue(scanCode, out pressed);
+
+            var pressed2 = false;
+            keys.TryGetValue(scanCode2, out pressed2);
+
+            return pressed || pressed2;
+        }
         public static bool IsCursorInBounds(int x, int xx, int y, int yy)
         {
             var mousePos = Window.GetMousePosition().Value;
