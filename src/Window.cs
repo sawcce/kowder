@@ -16,7 +16,7 @@ namespace kowder
         private static GRContext context;
         private static SKSurface skiaSurface;
         private static Keys? lastKeyPressed;
-        public static Point lastMousePosition = new Point(0,0);
+        public static Point lastMousePosition = new Point(0, 0);
         private static float i = 0;
         private static Action render = delegate () { };
         private static Size windowSize;
@@ -65,7 +65,7 @@ namespace kowder
                 }
             }
         }
-        
+
         /// <summary> Add the event handlers to their respective events </summary>
         private static void SubscribeToWindowEvents()
         {
@@ -180,8 +180,12 @@ namespace kowder
         /// </summary>
         private static void OnWindowKeyReleased(object sender, KeyEventArgs e)
         {
-            // Console.WriteLine("Release");
-            Window.keys[e.ScanCode] = false;
+            // Checks if the key has actually been released
+            // because the event gets fired when a key is being held (InputState.Repeat)
+            if (e.State == InputState.Release)
+            {
+                Window.keys[e.ScanCode] = false;
+            }
         }
 
         /// <summary>
@@ -197,7 +201,8 @@ namespace kowder
             switch (str)
             {
                 case "Backspace":
-                    if(typedContent.Length > 0) {
+                    if (typedContent.Length > 0)
+                    {
                         typedContent = typedContent.Remove(typedContent.Length - 1);
                     }
                     break;
