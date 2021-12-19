@@ -58,7 +58,7 @@ scancodes:
   54: Shift
   29: LeftControl
   56: LeftAlt
-  57: " "
+  57: " " # Space
   312: RightAlt
   285: RightControl
   328: Up

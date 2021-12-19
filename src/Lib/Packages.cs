@@ -6,8 +6,8 @@ namespace kowder
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
-    using ExtendingList = System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>>;
-    class Extension
+    using ExtendingList = System.Collections.Generic.Dictionary<string, dynamic>;
+    class Package
     {
         public string name;
         public string author = "";
@@ -16,7 +16,7 @@ namespace kowder
 
     class Packages
     {
-        public static List<Extension> extensions;
+        public static List<Package> packages;
         public static void Load()
         {
             var deserializer = new DeserializerBuilder()
@@ -29,14 +29,16 @@ namespace kowder
             foreach (string dir in Directory.EnumerateDirectories("packages"))
             {
                 string contents = File.ReadAllText($"{dir}/package.yaml");
-                var p = deserializer.Deserialize<Extension>(contents);
+                var p = deserializer.Deserialize<Package>(contents);
                 
                 if(p.extends != null) 
                 {
-                    foreach(KeyValuePair<string, List<string>> entry in p.extends) {
+                    foreach(KeyValuePair<string, dynamic> entry in p.extends) {
                         switch(entry.Key) {
                             case "kowder.scancodes":
                                 KeyboardLayouts.AddScancodeMappings(dir, entry.Value);
+                                break;
+                            case "kowder.themes":
                                 break;
                         }
                     }

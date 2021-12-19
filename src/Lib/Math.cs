@@ -4,5 +4,10 @@ namespace kowder {
         {
             return a + f * (b - a);
         }
+
+        public static int lerp(int a, int b, float f)
+        {
+            return (int) (a + f * (b - a));
+        }
     }
 }

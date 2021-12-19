@@ -181,7 +181,7 @@ namespace kowder
             }
 
             //Console.WriteLine("{0} {1}  {2}", e.Key.ToString(), str, e.ScanCode.ToString());
-            if (e.Key.ToString().Length == 1)
+            if (str?.Length == 1)
             {
                 typedContent += str;
             }

@@ -52,9 +52,15 @@ namespace kowder
          }
       }
 
+      /// <summary>
+      /// Function that gives the pressed keys's equivalent
+      /// in string (space= , 1=1 etc...) according to
+      /// the current keyboard's mapping
+      /// </summary>
       public static string GetKey(int scanCode)
       {
-         var def = scanCodeMaps[currentLayout].scancodes[scanCode];
+         var def = "undef";
+         scanCodeMaps[currentLayout].scancodes.TryGetValue(scanCode, out def);
 
          var shiftPressed = false;
          Window.keys.TryGetValue((int) ScanCodes.LeftShift, out shiftPressed);

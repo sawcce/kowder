@@ -8,12 +8,15 @@ namespace kowder
     {
         public static SKPaint surface = new SKPaint { Color = new SKColor(31, 31, 31, 255) };
         public static SKPaint bg = new SKPaint { Color = SKColor.Parse("#121212") };
-        public static float CaretAlpha = 0;
         private static SideBar sideBar = new SideBar();
+        private static Carret carret = new Carret(0, 0);
         private static int topAnchor = 35;
         static void Main(string[] args)
         {
             Task.Run(() => Packages.Load());
+
+            var TextPaint = new SKPaint { Color = new SKColor(255, 255, 255, 255), TextSize = 25 };
+            TextPaint.Typeface = SKTypeface.FromFile("res/um.ttf");
 
             Task.Run(() => Window.SetRenderMethod(delegate ()
             {
@@ -23,27 +26,20 @@ namespace kowder
 
                 sideBar.Draw(topAnchor);
 
-                var TextPaint = new SKPaint { Color = new SKColor(255, 255, 255, 255), TextSize = 25 };
+
+                var textTop = topAnchor+25;
                 canvas.DrawText(
                     Window.typedContent,
-                    248, 50,
+                    248, textTop,
                     TextPaint
                 );
 
-                var Alpha = MathF.Abs((MathF.Sin(CaretAlpha) * 255));
-                var CaretPaint = new SKPaint
-                {
-                    Color = new SKColor(255, 255, 255, (byte)Alpha)
-                };
+                var width = (int) TextPaint.MeasureText(Window.typedContent);
 
-                var width = TextPaint.MeasureText(Window.typedContent);
-                canvas.DrawRect(
-                    248 + width, 25,
-                    2, 25,
-                    CaretPaint
+                carret.Move(
+                    255 + width, topAnchor + 5
                 );
-
-                CaretAlpha += 0.01f;
+                carret.Draw();
             })
             );
 

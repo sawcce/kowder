@@ -1,3 +1,5 @@
 name: Nom
 author: Sawcce
 extends:
+  kowder.theme: 
+    - "darkoo.yaml"
