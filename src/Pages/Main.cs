@@ -1,6 +1,7 @@
 namespace kowder 
 {
     using SkiaSharp;
+    using System.Threading.Tasks;
     class KowderEditor {
         public static SKPaint surface = new SKPaint { Color = new SKColor(31, 31, 31, 255) };
         public static SKPaint bg = new SKPaint { Color = SKColor.Parse("#121212") };
@@ -21,7 +22,7 @@ namespace kowder
 
                 var textTop = topAnchor+25;
                 canvas.DrawText(
-                    Window.GetSize().ToString(),
+                    Window.typedContent,
                     248, textTop,
                     TextPaint
                 );
@@ -36,7 +37,7 @@ namespace kowder
         }
 
         public static void SizeChanged() {
-            sideBar.actionBar.GenerateIconsImage();
+            Task.Run(()=> sideBar.actionBar.GenerateIconsImage());
             sideBar.actionBar.canvas = Window.GetCanvas();
         }
     }
