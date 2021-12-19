@@ -95,8 +95,6 @@ namespace kowder
                exists = rightAltMap.TryGetValue(scanCode, out val);
 
                if(exists) return val;
-               
-               return val;
             }
             #endregion rightAltMap
 

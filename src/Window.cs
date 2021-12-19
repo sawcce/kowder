@@ -19,7 +19,7 @@ namespace kowder
         public static Point lastMousePosition = new Point(0, 0);
         private static float i = 0;
         private static Action render = delegate () { };
-        private static Size windowSize;
+        private static Size windowSize = new Size(800, 600);
         //private static Dictionary<MouseButton, bool> lastMouseButtons = new Dictionary<MouseButton, bool>();
         private static Dictionary<MouseButton, InputState> mouseButtons = new Dictionary<MouseButton, InputState>();
         public static Dictionary<int, bool> keys = new Dictionary<int, bool>();
@@ -44,7 +44,8 @@ namespace kowder
                     using (Window.skiaSurface = Window.GenerateSkiaSurface(context, Window.window.ClientSize))
                     {
                         Window.canvas = skiaSurface.Canvas;
-                        windowSize = window.ClientSize;
+                        windowSize = new Size(800, 600);
+                        KowderEditor.canvas = canvas;
                         while (!Window.window.IsClosing)
                         {
                             Glfw.PollEvents();
@@ -172,6 +173,11 @@ namespace kowder
             windowSize = window.ClientSize;
             skiaSurface = GenerateSkiaSurface(context, e.Size);
             canvas = skiaSurface.Canvas;
+
+            // Must reasign the canvas as else it won't be changed
+            KowderEditor.canvas = canvas;
+            KowderEditor.SizeChanged();
+
             Window.Render();
         }
 

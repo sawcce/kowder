@@ -25,6 +25,8 @@ scancodes:
   23: i
   24: o
   25: p
+  26: "^"
+  27: "$"
 
   # Second row of letters
   30: q
@@ -37,6 +39,8 @@ scancodes:
   37: k
   38: l
   39: m
+  40: ù
+  43: "*"
 
   # Third row of letters
   44: w
@@ -110,6 +114,8 @@ modifiers:
     23: I
     24: O
     25: P
+    26: "¨"
+    27: "£"
 
     # Second row of letters
     30: Q
@@ -122,6 +128,8 @@ modifiers:
     37: K
     38: L
     39: M
+    40: "%"
+    43: "µ"
 
     # Third row of letters
     44: W
@@ -130,8 +138,13 @@ modifiers:
     47: V
     48: B
     49: N
+    50: "?"
+    51: "."
+    52: "/"
+    53: "§"
   rightalt:
     18: € #E key
+    27: "¤" #$ key
     
     #& to =
     3: "~"
