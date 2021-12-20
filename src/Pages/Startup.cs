@@ -1,6 +1,7 @@
 namespace kowder
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using SkiaSharp;
     using kowder.Input;
@@ -9,15 +10,17 @@ namespace kowder
         public static SKPaint circle = new SKPaint { Color = new SKColor(255, 255, 255, 50) };
         public static SKCanvas canvas;
         public static LabeledCheckBox isFancyBGActivated = new LabeledCheckBox(100, 175, "Fancy background");
-        public static DropDownChoice keyboardLayout = new DropDownChoice();
+        public static DropDownChoice keyboardLayout = new DropDownChoice(KeyboardLayouts.layoutsNames.IndexOf(KeyboardLayouts.currentLayout), KeyboardLayouts.layoutsNames);
         public static float i = 0;
 
         public static void SetCanvas() 
         {
             isFancyBGActivated.canvas = canvas;
+            keyboardLayout.canvas = canvas;
         }
         public static void Init()
         {
+            keyboardLayout.position = new Point(100, 250);
             Window.SetRenderMethod(delegate ()
             {
                 canvas.DrawRect(0, 0, Window.Size.Width, Window.Size.Height, Themes.surface);
@@ -27,8 +30,8 @@ namespace kowder
                     DrawBG();
                 }
                 
-                
                 isFancyBGActivated.Draw();
+                keyboardLayout.Draw();
 
                 i += 0.01f;
                 canvas.DrawText("Welcome Kowder!", new SKPoint(100, 100), Themes.Title);

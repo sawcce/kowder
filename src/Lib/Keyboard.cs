@@ -25,19 +25,24 @@ namespace kowder
     class KeyboardLayouts
     {
         public static string currentLayout = "azerty";
+        public static List<string> layoutsNames = new List<string>();
         public static Dictionary<string, KeyboardLayout> scanCodeMaps = new Dictionary<string, KeyboardLayout>();
         public static void Init()
         {
             var deserializer = new DeserializerBuilder()
                .WithNamingConvention(UnderscoredNamingConvention.Instance)  // see height_in_inches in sample yml 
                .Build();
-
+            
+            /*
             foreach (string file in Directory.EnumerateFiles("res/scancode", "*.yaml"))
             {
                 string contents = File.ReadAllText(file);
                 var p = deserializer.Deserialize<KeyboardLayout>(contents);
+
+                layoutsNames.Add(p.defines);
                 scanCodeMaps.Add(p.defines, p);
             }
+            */
         }
 
         public static void AddScancodeMappings(string root, List<string> paths)
@@ -50,6 +55,7 @@ namespace kowder
             {
                 string scancodeMapping = File.ReadAllText($"{root}/scancodes/{path}");
                 var p = deserializer.Deserialize<KeyboardLayout>(scancodeMapping);
+                layoutsNames.Add(p.defines);
                 scanCodeMaps.Add(p.defines, p);
             }
         }
