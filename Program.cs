@@ -9,6 +9,7 @@ namespace kowder
         static void Main(string[] args)
         {
             Packages.Load();
+            Themes.Init();
 
             Startup.Init();
             

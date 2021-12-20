@@ -28,6 +28,9 @@ namespace kowder
         public static Size Size { get { return windowSize; } }
         public static string typedContent = "";
 
+        // Events
+        public static event EventHandler<MouseButton> MouseButtonPressed;
+
         #region  setup
         public static void Init()
         {
@@ -39,6 +42,11 @@ namespace kowder
                 Window.SubscribeToWindowEvents();
                 IntPtr hWnd = window.Handle;
 
+                // Limits minimum window size because couldn't find
+                // GLFW_DONT_CARE 
+                // https://www.glfw.org/docs/3.3/window_guide.html#window_sizelimits
+                window.SetSizeLimits(350, 250, 100000, 100000);
+
                 using (Window.context = Window.GenerateSkiaContext(Window.window))
                 {
                     using (Window.skiaSurface = Window.GenerateSkiaSurface(context, Window.window.ClientSize))
@@ -47,6 +55,7 @@ namespace kowder
                         windowSize = new Size(800, 600);
 
                         Startup.canvas = canvas;
+                        Startup.SetCanvas();
                         KowderEditor.canvas = canvas;
                         while (!Window.window.IsClosing)
                         {
@@ -77,7 +86,7 @@ namespace kowder
             Window.window.KeyPress += Window.OnWindowKeyPress;
             Window.window.KeyRelease += Window.OnWindowKeyReleased;
             Window.window.MouseMoved += Window.OnWindowMouseMoved;
-            Window.window.MouseButton += Window.OnMousePressed;
+            Window.window.MouseButton += Window.OnMouseAction;
         }
 
         /// <summary>Generates the skia context using a window element</summary>
@@ -173,8 +182,6 @@ namespace kowder
         private static void OnWindowsSizeChanged(object sender, SizeChangeEventArgs e)
         {
             var size = e.Size;
-            if(size.Width < 350) size = new Size(350, window.ClientSize.Height);
-            if(size.Height < 250) size = new Size(window.ClientSize.Width, 250);
 
             window.ClientSize = size;
             windowSize = size;
@@ -184,6 +191,8 @@ namespace kowder
             // Must reasign the canvas as else it won't be changed
             
             Startup.canvas = canvas;
+            Startup.SetCanvas();
+
             KowderEditor.canvas = canvas;
             KowderEditor.SizeChanged();
 
@@ -246,8 +255,13 @@ namespace kowder
             Window.Render();
         }
 
-        private static void OnMousePressed(object sender, MouseButtonEventArgs e)
+        private static void OnMouseAction(object sender, MouseButtonEventArgs e)
         {
+            if(e.Action == InputState.Press)
+            {
+                MouseButtonPressed?.Invoke(null, e.Button);
+            }
+            
             mouseButtons[e.Button] = e.Action;
         }
 

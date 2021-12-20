@@ -8,14 +8,6 @@ namespace kowder
         public static int topAnchor = 35;
         public static SKCanvas canvas;
         public static void Init() {
-            var src = @"
-            in fragmentProcessor color_map;
-
-            void main(float2 coord) {
-                color = vec4(coord.x, coord.y, 0, 255);
-            }";
-            //using var effect = SKRuntimeEffect.Create(src, out var errorText);
-
 
             Window.SetRenderMethod(delegate ()
             {

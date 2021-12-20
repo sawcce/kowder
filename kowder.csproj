@@ -7,10 +7,9 @@
 
   <ItemGroup>
     <PackageReference Include="glfw-net" Version="3.3.1" />
-    <PackageReference Include="keyw" Version="1.0.0" />
     <PackageReference Include="NLua" Version="1.6.0" />
     <PackageReference Include="Raylib-cs" Version="3.7.0.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.0-preview.179" />
+    <PackageReference Include="SkiaSharp" Version="2.80.3" />
     <PackageReference Include="Svg.Skia" Version="0.5.10" />
     <PackageReference Include="Topten.RichTextKit" Version="0.4.148" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
