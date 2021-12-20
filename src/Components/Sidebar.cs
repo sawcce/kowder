@@ -16,7 +16,7 @@ namespace kowder
         {
             var canvas = Window.GetCanvas();
 
-            canvas.DrawRect(0, topAnchor + 1, 248, Window.Size.Height - 30, KowderEditor.surface);
+            canvas.DrawRect(0, topAnchor + 1, 248, Window.Size.Height - 30, Themes.surface);
 
             actionBar.Draw(topAnchor);
         }
@@ -82,7 +82,7 @@ namespace kowder
                     new SKRect(10, topAnchor, 10 + 48, Window.Size.Height - 20),
                     15
                 ),
-                KowderEditor.bg
+                Themes.bg
             );
 
 

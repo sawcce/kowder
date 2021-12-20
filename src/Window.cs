@@ -45,6 +45,8 @@ namespace kowder
                     {
                         Window.canvas = skiaSurface.Canvas;
                         windowSize = new Size(800, 600);
+
+                        Startup.canvas = canvas;
                         KowderEditor.canvas = canvas;
                         while (!Window.window.IsClosing)
                         {
@@ -170,11 +172,18 @@ namespace kowder
 
         private static void OnWindowsSizeChanged(object sender, SizeChangeEventArgs e)
         {
-            windowSize = window.ClientSize;
-            skiaSurface = GenerateSkiaSurface(context, e.Size);
+            var size = e.Size;
+            if(size.Width < 350) size = new Size(350, window.ClientSize.Height);
+            if(size.Height < 250) size = new Size(window.ClientSize.Width, 250);
+
+            window.ClientSize = size;
+            windowSize = size;
+            skiaSurface = GenerateSkiaSurface(context, size);
             canvas = skiaSurface.Canvas;
 
             // Must reasign the canvas as else it won't be changed
+            
+            Startup.canvas = canvas;
             KowderEditor.canvas = canvas;
             KowderEditor.SizeChanged();
 

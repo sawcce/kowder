@@ -10,13 +10,8 @@ namespace kowder
         {
             Packages.Load();
 
-            KowderEditor.Init();
-            Window.SetRenderMethod(delegate ()
-            {
-                Window.GetCanvas().DrawRect(0,0,10,10, new SKPaint{
-                    Color = new SKColor(235,125,10, 255)
-                });
-            });
+            Startup.Init();
+            
             Window.Init();
         }
 
