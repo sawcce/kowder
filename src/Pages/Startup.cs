@@ -21,6 +21,8 @@ namespace kowder
         public static void Init()
         {
             keyboardLayout.position = new Point(100, 250);
+            keyboardLayout.Enable();
+            
             Window.SetRenderMethod(delegate ()
             {
                 canvas.DrawRect(0, 0, Window.Size.Width, Window.Size.Height, Themes.surface);

@@ -10,7 +10,14 @@ namespace kowder
         public static SKPaint Title = new SKPaint { Color = new SKColor(255, 255, 255, 255), TextSize = 40 };
         public static SKPaint TextPaint = new SKPaint { Color = new SKColor(255, 255, 255, 255), TextSize = 25 };
        
+        #region  Input
         public static SKPaint InputLabelPaint = new SKPaint { Color = new SKColor(120, 120, 120, 255), TextSize = 19};
+        
+        public static SKPaint InputBackground = new SKPaint
+        {
+            Color = new SKColor(60, 60, 60, 255)
+        };
+        #endregion Input
 
         public static void Init() 
         {

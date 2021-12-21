@@ -28,8 +28,12 @@ namespace kowder
         public static Size Size { get { return windowSize; } }
         public static string typedContent = "";
 
+
         // Events
         public static event EventHandler<MouseButton> MouseButtonPressed;
+        // More specific events to avoid if statements everywhere
+        public delegate void NoArgs();
+        public static event NoArgs LeftMouseButtonPressed;
 
         #region  setup
         public static void Init()
@@ -45,7 +49,7 @@ namespace kowder
                 // Limits minimum window size because couldn't find
                 // GLFW_DONT_CARE 
                 // https://www.glfw.org/docs/3.3/window_guide.html#window_sizelimits
-                window.SetSizeLimits(350, 250, 100000, 100000);
+                window.SetSizeLimits(450, 350, 100000, 100000);
 
                 using (Window.context = Window.GenerateSkiaContext(Window.window))
                 {
@@ -260,6 +264,11 @@ namespace kowder
             if(e.Action == InputState.Press)
             {
                 MouseButtonPressed?.Invoke(null, e.Button);
+
+                if(e.Button == MouseButton.Left) 
+                {
+                    LeftMouseButtonPressed?.Invoke();
+                }
             }
             
             mouseButtons[e.Button] = e.Action;
@@ -297,6 +306,12 @@ namespace kowder
 
             return pressed || pressed2;
         }
+
+        /// <summary>
+        /// Checks if the mouse's position is between x and xx on the x axis,
+        /// and y and yy on the y axis.
+        /// With x < xx and y < yy.
+        /// </summary>
         public static bool IsCursorInBounds(int x, int xx, int y, int yy)
         {
             var mousePos = Window.GetMousePosition().Value;
@@ -308,6 +323,34 @@ namespace kowder
             if (!inBoundsY) return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// <para>
+        /// Checks if the mouse's position is in the bounds of a vertical list and if so,
+        /// returns the index number that the mouse is hovering.
+        /// </para>
+        /// With <paramref name="x"/> and <paramref name="xx"/> being the bounds of the list on the x axis <para/>
+        /// <paramref name="top"/> being the coordinates of the list's top <para/>
+        /// <paramref name="itemHeight"/> being the height of the items <para/>
+        /// and <paramref name="itemCount"/> being the number of items in the list <para/> <para/>
+        /// NOTE: This only works for lists where the item height is fixed and known when the function
+        /// is called.
+        /// </summary>
+        public static (bool, int) SmartCursorBoundsVertical(int x, int xx, int top, int itemHeight, int itemCount)
+        {
+            var inBoundsX = lastMousePosition.X >= x && lastMousePosition.X <= xx;
+            if(!inBoundsX) return (false, -1);
+
+            var py = lastMousePosition.Y - top;
+            if(py < 0) return (false, -1);
+
+            var yIndex = py / itemHeight;
+
+            var inBoundsY = yIndex < itemCount;
+            if(!inBoundsY) return (false, -1);
+
+            return (true, yIndex);
         }
         #endregion
     }

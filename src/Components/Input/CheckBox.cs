@@ -74,15 +74,12 @@ namespace kowder.Input
     class CheckBox
     {
         public SKCanvas canvas;
-        protected SKPaint color = new SKPaint
-        {
-            Color = new SKColor(60, 60, 60, 255)
-        };
 
         protected SKPaint hovered = new SKPaint
         {
             Color = new SKColor(100, 100, 100, 255)
         };
+        protected SKPaint current = Themes.InputBackground;
 
         public bool Checked = false;
         public bool Hovered = false;
@@ -98,7 +95,23 @@ namespace kowder.Input
 
         protected void Init()
         {
-            kowder.Window.MouseButtonPressed += delegate (object sender, MouseButton mb)
+            kowder.Window.LeftMouseButtonPressed += delegate ()
+            {
+                if (InBounds())
+                {
+                    Checked = !Checked;
+                }
+            };
+        }
+
+        protected void Enable() 
+        {
+            Init();
+        }
+
+        public void Disable() 
+        {
+            kowder.Window.MouseButtonPressed -= delegate (object sender, MouseButton mb)
             {
                 if (mb == MouseButton.Left && InBounds())
                 {
@@ -106,19 +119,12 @@ namespace kowder.Input
                     Checked = !Checked;
                 }
             };
-
         }
 
         public void Draw()
         {
             if (InBounds())
             {
-                canvas.DrawRoundRect(
-                    position.X, position.Y,
-                    20, 20,
-                    6, 6,
-                    hovered
-                );
             }
             else
             {
@@ -126,9 +132,16 @@ namespace kowder.Input
                     position.X, position.Y,
                     20, 20,
                     6, 6,
-                    color
+                    Themes.InputBackground
                 );
             }
+
+            canvas.DrawRoundRect(
+                position.X, position.Y,
+                20, 20,
+                6, 6,
+                hovered
+            );
 
             if (Checked)
             {
